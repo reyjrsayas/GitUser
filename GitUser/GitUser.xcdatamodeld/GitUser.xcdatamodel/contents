@@ -1,4 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="false" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E266" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="AvatarImageEntity" representedClassName="AvatarImageEntity" syncable="YES">
+        <attribute name="avatar" optional="YES" attributeType="Binary"/>
+        <attribute name="id" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="FollowersEntity" representedClassName="FollowersEntity" syncable="YES">
+        <attribute name="count" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="FollowingEntity" representedClassName="FollowingEntity" syncable="YES">
+        <attribute name="count" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="UserEntity" representedClassName="UserEntity" syncable="YES">
+        <attribute name="avatar_url" optional="YES" attributeType="String"/>
+        <attribute name="followers_url" optional="YES" attributeType="String"/>
+        <attribute name="following_url" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="login" optional="YES" attributeType="String"/>
+        <attribute name="node_id" optional="YES" attributeType="String"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="site_admin" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="UserEntity" positionX="-434.2578125" positionY="-93.3671875" width="128" height="178"/>
+        <element name="FollowersEntity" positionX="-638.35546875" positionY="-250.45703125" width="128" height="73"/>
+        <element name="FollowingEntity" positionX="-315" positionY="72" width="128" height="73"/>
+        <element name="AvatarImageEntity" positionX="-450" positionY="-36" width="128" height="73"/>
+    </elements>
 </model>

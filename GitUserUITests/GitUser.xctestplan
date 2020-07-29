@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "BC087805-12E6-4A55-90F1-17AD96D08F02",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:GitUser.xcodeproj",
+      "identifier" : "5802F4FD24CF133300396FF0",
+      "name" : "GitUser"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:GitUser.xcodeproj",
+        "identifier" : "5802F51624CF133300396FF0",
+        "name" : "GitUserTests"
+      }
+    },
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:GitUser.xcodeproj",
+        "identifier" : "5802F52124CF133400396FF0",
+        "name" : "GitUserUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
