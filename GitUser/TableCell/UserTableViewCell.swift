@@ -24,6 +24,11 @@ class UserTableViewCell: UITableViewCell {
     func setupUser(_ user:User,_ invertAvatarImg:Bool ) {
         self.user = user;
         lblUsername.text = self.user?.login
+        if self.user?.note != nil {
+            if !(self.user?.note!.isEmpty)! {
+                noteImg.isHidden = false
+            }
+        }
         avatarImg.makeRounded()
         if (user.avatarImage == nil) {
             avatarImg.setImageFromUrl(user: self.user!, shouldInvert: invertAvatarImg) { (data) in

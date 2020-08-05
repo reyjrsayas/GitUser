@@ -38,6 +38,11 @@ class ViewController: UITableViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        users = CoreDataService.sharedInstance.getAllUsers();
+        self.tableView.reloadData()
+    }
+    
     fileprivate func randomPageSize() -> Int{
         return Int.random(in: 0 ... minPageSize)
     }
@@ -85,8 +90,6 @@ class ViewController: UITableViewController {
        
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if users!.count > indexPath.row {
-            print(users?.count)
-            print(indexPath.row)
             let user = users![indexPath.row];
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? UserTableViewCell
             cell?.setupUser(user, (indexPath.row % 4) == 3)

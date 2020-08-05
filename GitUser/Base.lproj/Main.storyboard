@@ -41,7 +41,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eFM-gK-rWL">
+                                                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="paper" translatesAutoresizingMaskIntoConstraints="NO" id="eFM-gK-rWL">
                                                     <rect key="frame" x="374" y="33" width="25" height="25"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="eFM-gK-rWL" secondAttribute="height" multiplier="1:1" id="Jg5-M6-Ue2"/>
@@ -103,4 +103,7 @@
             <point key="canvasLocation" x="-1241" y="-99"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="paper" width="256" height="256"/>
+    </resources>
 </document>
