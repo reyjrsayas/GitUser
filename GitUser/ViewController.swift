@@ -33,9 +33,13 @@ class ViewController: UITableViewController {
         if users?.count == 0 {
             loadMoreUser()
         } else {
-            currentIdx = users!.count
+            currentIdx = users!.count + randomPageSize()
             self.tableView.reloadData()
         }
+    }
+    
+    fileprivate func randomPageSize() -> Int{
+        return Int.random(in: 0 ... minPageSize)
     }
 
     func loadMoreUser(idx: Int = 0) {
@@ -51,7 +55,7 @@ class ViewController: UITableViewController {
                 }) {
                     // Do somethere here when data is finished saving
                     self.users = CoreDataService.sharedInstance.getAllUsers();
-                    self.currentIdx = self.users!.count + 1
+                    self.currentIdx = self.users!.count + self.randomPageSize()
                     self.tableView.reloadData()
                     self.isLoading = false;
                 }
