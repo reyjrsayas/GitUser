@@ -84,8 +84,10 @@ class ViewController: UITableViewController {
     }
        
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let user = users![indexPath.row];
-        if users!.count >= indexPath.row {
+        if users!.count > indexPath.row {
+            print(users?.count)
+            print(indexPath.row)
+            let user = users![indexPath.row];
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? UserTableViewCell
             cell?.setupUser(user, (indexPath.row % 4) == 3)
             return cell!
