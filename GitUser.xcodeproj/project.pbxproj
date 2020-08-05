@@ -19,6 +19,15 @@
 		5802F53724CF173100396FF0 /* UserDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5802F53524CF173100396FF0 /* UserDetailViewController.swift */; };
 		5802F53824CF173100396FF0 /* UserDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5802F53624CF173100396FF0 /* UserDetailViewController.xib */; };
 		5802F53C24CF184A00396FF0 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5802F53B24CF184A00396FF0 /* ApiService.swift */; };
+		58532DC324DA3CBE000D199C /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58532DC224DA3CBE000D199C /* UserTableViewCell.swift */; };
+		58532DC724DA6FCA000D199C /* UserAvatarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58532DC524DA6FCA000D199C /* UserAvatarTableViewCell.swift */; };
+		58532DC824DA6FCA000D199C /* UserAvatarTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58532DC624DA6FCA000D199C /* UserAvatarTableViewCell.xib */; };
+		58AE815A24DA76A500B1907D /* UserProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58AE815824DA76A500B1907D /* UserProfileTableViewCell.swift */; };
+		58AE815B24DA76A500B1907D /* UserProfileTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58AE815924DA76A500B1907D /* UserProfileTableViewCell.xib */; };
+		58AE815E24DA7EBB00B1907D /* UserNoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58AE815C24DA7EBB00B1907D /* UserNoteTableViewCell.swift */; };
+		58AE815F24DA7EBB00B1907D /* UserNoteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58AE815D24DA7EBB00B1907D /* UserNoteTableViewCell.xib */; };
+		58AE816224DA854C00B1907D /* SaveTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58AE816024DA854C00B1907D /* SaveTableViewCell.swift */; };
+		58AE816324DA854C00B1907D /* SaveTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58AE816124DA854C00B1907D /* SaveTableViewCell.xib */; };
 		58C164C524D047E600E04C9A /* UserEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C164BD24D047E600E04C9A /* UserEntity+CoreDataClass.swift */; };
 		58C164C624D047E600E04C9A /* UserEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C164BE24D047E600E04C9A /* UserEntity+CoreDataProperties.swift */; };
 		58C164C724D047E600E04C9A /* AvatarImageEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C164BF24D047E600E04C9A /* AvatarImageEntity+CoreDataClass.swift */; };
@@ -66,6 +75,15 @@
 		5802F53524CF173100396FF0 /* UserDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailViewController.swift; sourceTree = "<group>"; };
 		5802F53624CF173100396FF0 /* UserDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserDetailViewController.xib; sourceTree = "<group>"; };
 		5802F53B24CF184A00396FF0 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
+		58532DC224DA3CBE000D199C /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
+		58532DC524DA6FCA000D199C /* UserAvatarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatarTableViewCell.swift; sourceTree = "<group>"; };
+		58532DC624DA6FCA000D199C /* UserAvatarTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserAvatarTableViewCell.xib; sourceTree = "<group>"; };
+		58AE815824DA76A500B1907D /* UserProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileTableViewCell.swift; sourceTree = "<group>"; };
+		58AE815924DA76A500B1907D /* UserProfileTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserProfileTableViewCell.xib; sourceTree = "<group>"; };
+		58AE815C24DA7EBB00B1907D /* UserNoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNoteTableViewCell.swift; sourceTree = "<group>"; };
+		58AE815D24DA7EBB00B1907D /* UserNoteTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserNoteTableViewCell.xib; sourceTree = "<group>"; };
+		58AE816024DA854C00B1907D /* SaveTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveTableViewCell.swift; sourceTree = "<group>"; };
+		58AE816124DA854C00B1907D /* SaveTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SaveTableViewCell.xib; sourceTree = "<group>"; };
 		58C164BD24D047E600E04C9A /* UserEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		58C164BE24D047E600E04C9A /* UserEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		58C164BF24D047E600E04C9A /* AvatarImageEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AvatarImageEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -126,6 +144,8 @@
 		5802F50024CF133300396FF0 /* GitUser */ = {
 			isa = PBXGroup;
 			children = (
+				58532DC124DA3CA2000D199C /* TableCell */,
+				58532DC024DA3BCD000D199C /* Coordinator */,
 				58C164AC24D0444D00E04C9A /* CoreData */,
 				5802F53D24CF20F900396FF0 /* Models */,
 				5802F53A24CF183700396FF0 /* Services */,
@@ -192,6 +212,37 @@
 			children = (
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		58532DC024DA3BCD000D199C /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		58532DC124DA3CA2000D199C /* TableCell */ = {
+			isa = PBXGroup;
+			children = (
+				58532DC424DA6FB2000D199C /* UserDetails */,
+				58532DC224DA3CBE000D199C /* UserTableViewCell.swift */,
+			);
+			path = TableCell;
+			sourceTree = "<group>";
+		};
+		58532DC424DA6FB2000D199C /* UserDetails */ = {
+			isa = PBXGroup;
+			children = (
+				58532DC524DA6FCA000D199C /* UserAvatarTableViewCell.swift */,
+				58532DC624DA6FCA000D199C /* UserAvatarTableViewCell.xib */,
+				58AE815824DA76A500B1907D /* UserProfileTableViewCell.swift */,
+				58AE815924DA76A500B1907D /* UserProfileTableViewCell.xib */,
+				58AE815C24DA7EBB00B1907D /* UserNoteTableViewCell.swift */,
+				58AE815D24DA7EBB00B1907D /* UserNoteTableViewCell.xib */,
+				58AE816024DA854C00B1907D /* SaveTableViewCell.swift */,
+				58AE816124DA854C00B1907D /* SaveTableViewCell.xib */,
+			);
+			path = UserDetails;
 			sourceTree = "<group>";
 		};
 		58C164AC24D0444D00E04C9A /* CoreData */ = {
@@ -313,7 +364,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58AE816324DA854C00B1907D /* SaveTableViewCell.xib in Resources */,
+				58AE815B24DA76A500B1907D /* UserProfileTableViewCell.xib in Resources */,
 				5802F51124CF133300396FF0 /* LaunchScreen.storyboard in Resources */,
+				58AE815F24DA7EBB00B1907D /* UserNoteTableViewCell.xib in Resources */,
+				58532DC824DA6FCA000D199C /* UserAvatarTableViewCell.xib in Resources */,
 				5802F50E24CF133300396FF0 /* Assets.xcassets in Resources */,
 				5802F53824CF173100396FF0 /* UserDetailViewController.xib in Resources */,
 				5802F50924CF133300396FF0 /* Main.storyboard in Resources */,
@@ -341,18 +396,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58AE816224DA854C00B1907D /* SaveTableViewCell.swift in Sources */,
 				58C164CA24D047E600E04C9A /* FollowersEntity+CoreDataProperties.swift in Sources */,
 				58C164C524D047E600E04C9A /* UserEntity+CoreDataClass.swift in Sources */,
 				58C164CC24D047E600E04C9A /* FollowingEntity+CoreDataProperties.swift in Sources */,
 				5802F50624CF133300396FF0 /* ViewController.swift in Sources */,
+				58532DC324DA3CBE000D199C /* UserTableViewCell.swift in Sources */,
+				58AE815E24DA7EBB00B1907D /* UserNoteTableViewCell.swift in Sources */,
 				5802F53724CF173100396FF0 /* UserDetailViewController.swift in Sources */,
 				58C164C824D047E600E04C9A /* AvatarImageEntity+CoreDataProperties.swift in Sources */,
 				5802F53C24CF184A00396FF0 /* ApiService.swift in Sources */,
 				58C164CE24D0484500E04C9A /* CoreDataService.swift in Sources */,
 				58C164CB24D047E600E04C9A /* FollowingEntity+CoreDataClass.swift in Sources */,
+				58AE815A24DA76A500B1907D /* UserProfileTableViewCell.swift in Sources */,
 				5802F50224CF133300396FF0 /* AppDelegate.swift in Sources */,
 				58C164C924D047E600E04C9A /* FollowersEntity+CoreDataClass.swift in Sources */,
 				58C164C724D047E600E04C9A /* AvatarImageEntity+CoreDataClass.swift in Sources */,
+				58532DC724DA6FCA000D199C /* UserAvatarTableViewCell.swift in Sources */,
 				58C164C624D047E600E04C9A /* UserEntity+CoreDataProperties.swift in Sources */,
 				5802F50424CF133300396FF0 /* SceneDelegate.swift in Sources */,
 				5802F50C24CF133300396FF0 /* GitUser.xcdatamodeld in Sources */,

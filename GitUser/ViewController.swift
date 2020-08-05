@@ -35,8 +35,6 @@ class ViewController: UITableViewController {
                         print("Counter: \(counter) / Total: \(total)")
                     }) {
                         // Do somethere here when data is finished saving
-                        print("Saving users finished")
-                        print("=====================")
                         self.users = CoreDataService.sharedInstance.getAllUsers();
                         self.tableView.reloadData()
                     }
@@ -58,19 +56,27 @@ class ViewController: UITableViewController {
         
         
         let details = UserDetailViewController(nibName: "UserDetailViewController", bundle: nil)
+        let user = users![indexPath.row];
+        details.user = user
         navigationController?.pushViewController(details, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return users!.count
-       }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 91
+    }
        
-   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-       let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-    let user = users![indexPath.row];
-    cell.textLabel?.text = user.login
-       return cell
-   }
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? UserTableViewCell
+        
+        let user = users![indexPath.row];
+        cell?.setupUser(user, (indexPath.row % 4) == 3)
+        
+        return cell!
+    }
 }
 
 extension ViewController: UISearchResultsUpdating {

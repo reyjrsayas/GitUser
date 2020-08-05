@@ -28,11 +28,17 @@ public struct User: Codable {
     public let avatar_url: String?
     public let type: String?
     public let site_admin: Bool?
-    public let note: String?
-//    public let followers: [User]?
-//    public let followings: [User]?
+    public var note: String?
     public let followers_url: String?
     public let following_url: String?
+    public let name: String?
+    public let company: String?
+    public let location: String?
+    public let blog: String?
+    public let bio:String?
+    public let followersCount: Int?
+    public let followingCount: Int?
+    public var avatarImage:Data?
     
     private enum CodingKeys: String, CodingKey {
         case login = "login"
@@ -44,12 +50,31 @@ public struct User: Codable {
         case note = "note"
         case followers_url = "followers_url"
         case following_url = "following_url"
+        case name = "name"
+        case company = "company"
+        case location = "location"
+        case blog = "blog"
+        case bio = "bio"
+        case avatarImage = "avatarImage"
+        case followersCount = "followersCount"
+        case followingCount = "followingCount"
     }
 }
 
 public enum DispatchPriority {
     case high
     case low
+}
+
+public struct UserDetailsResponse: Codable {
+    public let data: User
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        
+        let user = try container.decode(User.self)
+        data = user
+    }
 }
 
 public struct UserListResponse: Codable {
@@ -91,6 +116,48 @@ class ApiService {
         fetchResource(url: url!, queryItems: queryItems, dispatchQueue: getPriority(dispatchPriority: dispatchPriority)!, completion: result)
     }
     
+    public func getUserDetails(user:User, dispatchPriority: DispatchPriority, result: @escaping (Result<UserDetailsResponse, APIServiceError>) -> Void) {
+        let url = baseURL?.appendingPathComponent("users").appendingPathComponent(user.login!)
+        
+        fetchDetailsResource(url: url!, queryItems: nil, dispatchQueue: getPriority(dispatchPriority: dispatchPriority)!, completion: result)
+    }
+    
+    public func downloadImage(url:String, dispatch:DispatchPriority, result: @escaping (Result<UIImage, APIServiceError>) -> Void) {
+        let _url = URL(string: url)
+        
+        fetchImage(url: _url!, dispatch: dispatch, dispatchQueue: getPriority(dispatchPriority: dispatch)!, completion: result)
+    }
+    
+    private func fetchImage(url: URL, dispatch:DispatchPriority, dispatchQueue: DispatchQueue, completion: @escaping (Result<UIImage, APIServiceError>) -> Void) {
+        // User Semaphore to queue and dispatch all network request one at the time
+        let semaphore = DispatchSemaphore(value: 1)
+        
+        // Begin dispatch
+        dispatchQueue.async {
+            // Begin and wait
+            semaphore.wait()
+            
+            URLSession.shared.dataTask(with: url) { (result) in
+               switch result {
+                   case .success(let (response, data)):
+                    
+                       guard let statusCode = (response as? HTTPURLResponse)?.statusCode, 200..<299 ~= statusCode else {
+                           completion(.failure(.invalidResponse))
+                           return
+                       }
+                       
+                       let values = UIImage(data: data)
+                       completion(.success(values!))
+                       // Finished
+                       semaphore.signal()
+               case .failure( _):
+                       completion(.failure(.apiError))
+                       semaphore.signal()
+                   }
+            }.resume()
+        }
+    }
+    
     
     private func getPriority(dispatchPriority: DispatchPriority) -> DispatchQueue? {
         let priority: DispatchQueue?
@@ -99,10 +166,58 @@ class ApiService {
         case .high:
             priority = DispatchQueue.global(qos: .userInitiated)
         default:
-            priority = DispatchQueue.global(qos: .utility)
+            priority = DispatchQueue.global(qos: .userInitiated)
         }
         
         return priority
+    }
+    
+    private func fetchDetailsResource<T: Decodable>(url: URL, queryItems:[URLQueryItem]?, dispatchQueue:DispatchQueue, completion: @escaping (Result<T, APIServiceError>) -> Void) {
+        
+        // User Semaphore to queue and dispatch all network request one at the time
+        let semaphore = DispatchSemaphore(value: 1)
+        
+        // Begin dispatch
+        dispatchQueue.async {
+            // Begin and wait
+            semaphore.wait()
+            guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+                completion(.failure(.invalidEndpoint))
+                return
+            }
+            
+            if queryItems != nil {
+                urlComponents.queryItems = queryItems
+            }
+            
+            guard let url = urlComponents.url else {
+                completion(.failure(.invalidEndpoint))
+                return
+            }
+            
+            URLSession.shared.dataTask(with: url) { (result) in
+               switch result {
+                   case .success(let (response, data)):
+                    
+                       guard let statusCode = (response as? HTTPURLResponse)?.statusCode, 200..<299 ~= statusCode else {
+                           completion(.failure(.invalidResponse))
+                           return
+                       }
+                       do {
+                        let values = try JSONDecoder().decode(UserDetailsResponse.self, from: data)
+                        completion(.success(values as! T))
+                        // Finished
+                        semaphore.signal()
+                       } catch {
+                           completion(.failure(.decodeError))
+                            semaphore.signal()
+                       }
+               case .failure( _):
+                       completion(.failure(.apiError))
+                       semaphore.signal()
+                   }
+            }.resume()
+        }
     }
     
     private func fetchResource<T: Decodable>(url: URL, queryItems:[URLQueryItem]?, dispatchQueue:DispatchQueue, completion: @escaping (Result<T, APIServiceError>) -> Void) {
@@ -143,9 +258,11 @@ class ApiService {
                         semaphore.signal()
                        } catch {
                            completion(.failure(.decodeError))
+                            semaphore.signal()
                        }
                case .failure( _):
                        completion(.failure(.apiError))
+                       semaphore.signal()
                    }
             }.resume()
         }

@@ -15,6 +15,94 @@ class CoreDataService {
     
     fileprivate var manageContext:NSManagedObjectContext?
     
+    func getUser(user:User) -> User? {
+        let contex = getManageContext()
+        let userEntity: UserEntity!
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
+        let entity = NSEntityDescription.entity(forEntityName: "UserEntity", in: contex)
+        
+        fetchRequest.entity = entity
+        fetchRequest.predicate = NSPredicate(format: "id == %i", user.id!)
+        
+        do {
+            let result = try contex.fetch(fetchRequest) as! [UserEntity]
+            
+            if result.count == 0 {
+                return nil
+            }
+            
+            userEntity = result.first!
+            
+            let _user = User(
+                login: userEntity.login,
+                id: Int(exactly: NSNumber(value: userEntity.id)),
+                node_id: userEntity.node_id,
+                avatar_url: userEntity.avatar_url,
+                type: userEntity.type,
+                site_admin: userEntity.site_admin,
+                note: userEntity.note,
+                followers_url: userEntity.followers_url,
+                following_url: userEntity.following_url,
+                name: userEntity.name,
+                company: userEntity.company,
+                location: userEntity.location,
+                blog: userEntity.blog,
+                bio: userEntity.bio,
+                followersCount: Int(exactly: NSNumber(value: userEntity.followersCount)),
+                followingCount: Int(exactly: NSNumber(value: userEntity.followingCount)),
+                avatarImage: userEntity.avatarImage
+            )
+            
+            return _user
+        } catch {
+            return nil
+        }
+    }
+    
+    func updateUser(user:User) -> Bool{
+        let contex = getManageContext()
+        let userEntity: UserEntity?
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
+        let entity = NSEntityDescription.entity(forEntityName: "UserEntity", in: contex)
+        
+        fetchRequest.entity = entity
+        fetchRequest.predicate = NSPredicate(format: "id == %i", user.id!)
+        
+        do {
+            let result = try contex.fetch(fetchRequest) as! [UserEntity]
+            
+            if result.count == 0 {
+                return false
+            }
+            
+            userEntity = result.first
+            
+            userEntity?.avatarImage = user.avatarImage
+            userEntity?.name = user.name
+            userEntity?.company = user.company
+            userEntity?.location = user.location
+            userEntity?.blog = user.blog
+            userEntity?.bio = user.bio
+            userEntity?.note = user.note
+            userEntity?.followersCount = Int32(exactly: NSNumber(value: user.followersCount ?? 0))!
+            userEntity?.followingCount = Int32(exactly: NSNumber(value: user.followingCount ?? 0))!
+            
+            do {
+                try contex.save()
+                return true
+            } catch {
+                fatalError("Failure to save child context: \(error)")
+            }
+            
+        } catch {
+            fatalError("Failure to fetch the user")
+        }
+        
+        return false
+    }
+    
     func insertUser(users:[User], withProgress: @escaping((_ counter:Int, _ total:Int) -> ()), complete: @escaping(() -> ())) {
         
         let context = getManageContext()
@@ -28,12 +116,20 @@ class CoreDataService {
                     let userEntity = NSEntityDescription.insertNewObject(forEntityName: "UserEntity", into: childContext) as? UserEntity
                     
                     // set values
-                    userEntity?.id = Double(exactly: NSNumber(value: user.id!))!
-                    userEntity?.login = user.login
-                    userEntity?.node_id = user.node_id
-                    userEntity?.note = user.note
-                    userEntity?.site_admin = user.site_admin!
-                    userEntity?.type = user.type
+                    userEntity?.id = Int32(exactly: NSNumber(value: user.id!))!
+                    userEntity?.login = user.login ?? ""
+                    userEntity?.node_id = user.node_id ?? ""
+                    userEntity?.note = user.note ?? ""
+                    userEntity?.site_admin = user.site_admin ?? false
+                    userEntity?.type = user.type ?? ""
+                    userEntity?.avatar_url = user.avatar_url ?? ""
+                    userEntity?.name = user.name ?? ""
+                    userEntity?.company = user.name ?? ""
+                    userEntity?.location = user.location ?? ""
+                    userEntity?.blog = user.blog ?? ""
+                    userEntity?.bio = user.bio ?? ""
+                    userEntity?.followersCount = Int32(exactly: NSNumber(value: user.followersCount ?? 0))!
+                    userEntity?.followingCount = Int32(exactly: NSNumber(value: user.followingCount ?? 0))!
                     
                     do {
                         try childContext.save()
@@ -90,7 +186,15 @@ class CoreDataService {
                     site_admin: user.site_admin,
                     note: user.note,
                     followers_url: user.followers_url,
-                    following_url: user.following_url
+                    following_url: user.following_url,
+                    name: user.name,
+                    company: user.company,
+                    location: user.location,
+                    blog: user.blog,
+                    bio: user.bio,
+                    followersCount: Int(exactly: NSNumber(value: user.followersCount)),
+                    followingCount: Int(exactly: NSNumber(value: user.followingCount)),
+                    avatarImage: user.avatarImage
                 )
                 
                 users.append(user)
@@ -125,7 +229,7 @@ class CoreDataService {
             
             
             for user in fetchUsers! {
-                let user = User(
+                let _user = User(
                     login: user.login,
                     id: Int(exactly: NSNumber(value: user.id)),
                     node_id: user.node_id,
@@ -134,10 +238,18 @@ class CoreDataService {
                     site_admin: user.site_admin,
                     note: user.note,
                     followers_url: user.followers_url,
-                    following_url: user.following_url
+                    following_url: user.following_url,
+                    name: user.name,
+                    company: user.company,
+                    location: user.location,
+                    blog: user.blog,
+                    bio: user.bio,
+                    followersCount: Int(exactly: NSNumber(value: user.followersCount)),
+                    followingCount: Int(exactly: NSNumber(value: user.followingCount)),
+                    avatarImage: user.avatarImage
                 )
                 
-                users.append(user)
+                users.append(_user)
             }
             
             return users
