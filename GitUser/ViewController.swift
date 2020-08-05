@@ -15,7 +15,7 @@ class ViewController: UITableViewController {
     var users: [User]?
     
     var currentIdx:Int = 0;
-    var minPageSize:Int = 30;
+    var minPageSize:Int = 100;
     
     private var isLoading: Bool = false;
 
@@ -76,7 +76,7 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return users!.count
+        return users!.count + 1
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -84,12 +84,15 @@ class ViewController: UITableViewController {
     }
        
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? UserTableViewCell
-        
         let user = users![indexPath.row];
-        cell?.setupUser(user, (indexPath.row % 4) == 3)
-        
-        return cell!
+        if users!.count >= indexPath.row {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? UserTableViewCell
+            cell?.setupUser(user, (indexPath.row % 4) == 3)
+            return cell!
+        } else {
+            let loadingCell = LoadingTableViewCell.instanceFromNib()
+            return loadingCell
+        }
     }
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
