@@ -139,7 +139,6 @@ class CoreDataService {
                 } else {
                     // do somethere here when it is already in the database
                 }
-                
                 count = count + 1
                 withProgress(count, users.count)
             }

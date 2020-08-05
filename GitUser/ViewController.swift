@@ -13,6 +13,11 @@ class ViewController: UITableViewController {
     let searchController = UISearchController(searchResultsController: nil)
     
     var users: [User]?
+    
+    var currentIdx:Int = 0;
+    var minPageSize:Int = 30;
+    
+    private var isLoading: Bool = false;
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,29 +31,34 @@ class ViewController: UITableViewController {
         users = CoreDataService.sharedInstance.getAllUsers();
         
         if users?.count == 0 {
-            ApiService.shared.getUserList(dispatchPriority: .high) { (result) in
-                switch result {
-                case .success(let response):
-                    // Save returned data on Device
-                    CoreDataService.sharedInstance.insertUser(users: response.data, withProgress: { (counter, total) in
-                        // Do something here
-                        print("Counter: \(counter) / Total: \(total)")
-                    }) {
-                        // Do somethere here when data is finished saving
-                        self.users = CoreDataService.sharedInstance.getAllUsers();
-                        self.tableView.reloadData()
-                    }
-                case .failure(let error):
-                    print(error.localizedDescription);
-                }
-            }
+            loadMoreUser()
         } else {
+            currentIdx = users!.count
             self.tableView.reloadData()
         }
     }
 
-    func loadAllUsers() {
-        
+    func loadMoreUser(idx: Int = 0) {
+        self.isLoading = true;
+        ApiService.shared.getUserList(index: idx, dispatchPriority: .high) { (result) in
+            switch result {
+            case .success(let response):
+                // Save returned data on Device
+                CoreDataService.sharedInstance.insertUser(users: response.data, withProgress: { (counter, total) in
+                    // Do something here
+                    print("Counter: \(counter) / Total: \(total)")
+                    
+                }) {
+                    // Do somethere here when data is finished saving
+                    self.users = CoreDataService.sharedInstance.getAllUsers();
+                    self.currentIdx = self.users!.count + 1
+                    self.tableView.reloadData()
+                    self.isLoading = false;
+                }
+            case .failure(let error):
+                print(error.localizedDescription);
+            }
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -76,6 +86,17 @@ class ViewController: UITableViewController {
         cell?.setupUser(user, (indexPath.row % 4) == 3)
         
         return cell!
+    }
+
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+
+        if offsetY > contentHeight - scrollView.frame.size.height {
+            if !self.isLoading {
+                self.loadMoreUser(idx: currentIdx)
+            }
+        }
     }
 }
 
