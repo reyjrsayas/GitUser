@@ -16,6 +16,8 @@ class UserTableViewCell: UITableViewCell {
     
     private var user:User?;
     
+    private var imgLoader = ImageLoader()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -27,18 +29,17 @@ class UserTableViewCell: UITableViewCell {
         if self.user?.note != nil {
             if !(self.user?.note!.isEmpty)! {
                 noteImg.isHidden = false
-            }
-        }
-        avatarImg.makeRounded()
-        if (user.avatarImage == nil) {
-            avatarImg.setImageFromUrl(user: self.user!, shouldInvert: invertAvatarImg) { (data) in
-                self.user?.avatarImage = data
-                _ = CoreDataService.sharedInstance.updateUser(user: self.user!)
+            } else {
+                noteImg.isHidden = true
             }
         } else {
-            avatarImg.image = UIImage(data: (self.user?.avatarImage)!)
+            noteImg.isHidden = true
+        }
+        avatarImg.makeRounded()
+        imgLoader.obtainImageWithPath(imagePath: (self.user?.avatar_url)!) { (image) in
+            self.avatarImg.image = image
             if invertAvatarImg {
-                avatarImg.invertImage()
+                self.avatarImg.invertImage()
             }
         }
     }
@@ -49,6 +50,49 @@ class UserTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+}
+
+class ImageLoader {
+    
+    var task: URLSessionDownloadTask!
+    var session: URLSession!
+    var cache: NSCache<NSString, UIImage>!
+    
+    init() {
+        session = URLSession.shared
+//        task = NSURLSession()
+        self.cache = NSCache()
+    }
+    
+    func obtainImageWithPath(imagePath: String, completionHandler: @escaping (UIImage) -> ()) {
+        let semaphore = DispatchSemaphore(value: 1)
+        
+        semaphore.wait()
+        if let image = self.cache.object(forKey: imagePath as NSString) {
+            DispatchQueue.main.async {
+                completionHandler(image)
+                semaphore.signal()
+            }
+        } else {
+            let placeholder = #imageLiteral(resourceName: "github")
+            DispatchQueue.main.async {
+                completionHandler(placeholder)
+                semaphore.signal()
+            }
+            let url: URL! = URL(string: imagePath)
+            task = session.downloadTask(with: url, completionHandler: { (location, response, error) in
+                if let data = try? Data(contentsOf: url) {
+                    let img: UIImage! = UIImage(data: data)
+                    self.cache.setObject(img, forKey: imagePath as NSString)
+                    DispatchQueue.main.async {
+                        completionHandler(img)
+                        semaphore.signal()
+                    }
+                }
+            })
+            task.resume()
+        }
+    }
 }
 
 extension UIImageView {

@@ -60,6 +60,54 @@ class CoreDataService {
         }
     }
     
+    func updateUserDetails(user:User) -> Bool {
+        let privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        privateContext.persistentStoreCoordinator = manageContext?.persistentStoreCoordinator
+        privateContext.perform {
+            let contex = self.getManageContext()
+            let userEntity: UserEntity?
+            
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
+            let entity = NSEntityDescription.entity(forEntityName: "UserEntity", in: contex)
+            
+            fetchRequest.entity = entity
+            fetchRequest.predicate = NSPredicate(format: "id == %i", user.id!)
+            
+            do {
+                let result = try contex.fetch(fetchRequest) as! [UserEntity]
+                
+                if result.count == 0 {
+//                    return false
+                }
+                
+                userEntity = result.first
+                
+                userEntity?.avatarImage = user.avatarImage
+                userEntity?.name = user.name
+                userEntity?.company = user.company
+                userEntity?.location = user.location
+                userEntity?.blog = user.blog
+                userEntity?.bio = user.bio
+                userEntity?.note = user.note
+                userEntity?.followersCount = Int32(exactly: NSNumber(value: user.followersCount ?? 0))!
+                userEntity?.followingCount = Int32(exactly: NSNumber(value: user.followingCount ?? 0))!
+                
+                do {
+                    try contex.save()
+//                    return true
+                } catch {
+                    fatalError("Failure to save child context: \(error)")
+                }
+                
+            } catch {
+                fatalError("Failure to fetch the user")
+            }
+            
+//            return false
+        }
+        return false
+    }
+    
     func updateUser(user:User) -> Bool{
         let contex = getManageContext()
         let userEntity: UserEntity?
@@ -163,7 +211,7 @@ class CoreDataService {
         userFetch.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
         
         if keyword.count > 1 {
-            userFetch.predicate = NSPredicate(format: "login contains[cd] %@", keyword)
+            userFetch.predicate = NSPredicate(format: "login contains[cd] %@ OR note contains[cd] %@", keyword, keyword)
         }
         
         var users = [User]()

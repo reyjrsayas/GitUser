@@ -33,6 +33,7 @@ class UserNoteTableViewCell: UITableViewCell {
 
 extension UserNoteTableViewCell: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
+        updateNote!(textView.text)
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -40,6 +41,6 @@ extension UserNoteTableViewCell: UITextViewDelegate {
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        updateNote!(textView.text)
+        
     }
 }

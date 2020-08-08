@@ -11,7 +11,10 @@ import UIKit
 class UserDetailViewController: UIViewController {
 
     var user:User?
+    private var imgLoader = ImageLoader()
     @IBOutlet weak var userTableView: UITableView!
+    
+    var doneHandler: (()->())?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,12 +36,13 @@ class UserDetailViewController: UIViewController {
                     case .failure(let error):
                         print(error.localizedDescription);
                         self.showAlert(message: error.localizedDescription, title: "Error")
-                        
                     }
                 }
             } else {
                 self.user = user
-                self.userTableView.reloadData()
+                DispatchQueue.main.async {
+                    self.userTableView.reloadData()
+                }
             }
         }
     }
@@ -48,6 +52,7 @@ class UserDetailViewController: UIViewController {
         
         alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: { (action) in
             self.navigationController?.popViewController(animated: true)
+            self.doneHandler?()
         }))
         
         self.present(alert, animated: true, completion: nil)
@@ -60,8 +65,12 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let avatarCell = UserAvatarTableViewCell.instanceFromNib()
-            if user?.avatarImage != nil {
-                avatarCell.avatarImg.image = UIImage(data: (user?.avatarImage)!)
+//            if user?.avatarImage != nil {
+//                avatarCell.avatarImg.image = UIImage(data: (user?.avatarImage)!)
+//            }
+            
+            imgLoader.obtainImageWithPath(imagePath: (self.user?.avatar_url)!) { (image) in
+                avatarCell.avatarImg.image = image
             }
             
             avatarCell.lblFollowersCount.text = "\(user?.followersCount ?? 0)"

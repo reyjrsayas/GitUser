@@ -16,9 +16,20 @@ public enum ApiType:Int {
 public enum APIServiceError: Error {
     case apiError
     case invalidEndpoint
-    case invalidResponse
+    case invalidResponse(message:String)
     case noData
     case decodeError
+    
+    var errorDescription:String? {
+        switch self {
+        case let .invalidResponse(message: message):
+            return message
+        default:
+            break
+        }
+        
+        return "There is an error occur"
+    }
 }
 
 public struct User: Codable {
@@ -142,7 +153,8 @@ class ApiService {
                    case .success(let (response, data)):
                     
                        guard let statusCode = (response as? HTTPURLResponse)?.statusCode, 200..<299 ~= statusCode else {
-                           completion(.failure(.invalidResponse))
+                           completion(.failure(.invalidEndpoint))
+                            semaphore.signal()
                            return
                        }
                        
@@ -200,7 +212,10 @@ class ApiService {
                    case .success(let (response, data)):
                     
                        guard let statusCode = (response as? HTTPURLResponse)?.statusCode, 200..<299 ~= statusCode else {
-                           completion(.failure(.invalidResponse))
+                           let values = try! JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                           
+                        completion(.failure(.invalidResponse(message: values!["message"] as! String)))
+                            semaphore.signal()
                            return
                        }
                        do {
@@ -248,7 +263,10 @@ class ApiService {
                    case .success(let (response, data)):
                     
                        guard let statusCode = (response as? HTTPURLResponse)?.statusCode, 200..<299 ~= statusCode else {
-                           completion(.failure(.invalidResponse))
+                            let values = try! JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                            
+                            completion(.failure(.invalidResponse(message: values!["message"] as! String)))
+                            semaphore.signal()
                            return
                        }
                        do {

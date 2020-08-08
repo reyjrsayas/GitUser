@@ -44,24 +44,24 @@ class GitUserTests: XCTestCase {
                 priority = .low
             }
             
-            ApiService.shared.getUserList(dispatchPriority: priority!) { (result) in
-                switch result {
-                case .success(let response):
-                    // Save returned data on Device
-                    print("Index: \(n)")
-                    print("Priority: \(priority)")
-                    print("Count: \(count)")
-                    print("======================")
-                    
-                    if count == 99 {
-                        expectation.fulfill()
-                    } else {
-                        count += 1
-                    }
-                case .failure(let error):
-                    print(error.localizedDescription);
-                }
-            }
+//            ApiService.shared.getUserList(dispatchPriority: priority!) { (result) in
+//                switch result {
+//                case .success(let response):
+//                    // Save returned data on Device
+//                    print("Index: \(n)")
+//                    print("Priority: \(priority)")
+//                    print("Count: \(count)")
+//                    print("======================")
+//                    
+//                    if count == 99 {
+//                        expectation.fulfill()
+//                    } else {
+//                        count += 1
+//                    }
+//                case .failure(let error):
+//                    print(error.localizedDescription);
+//                }
+//            }
         }
     }
 

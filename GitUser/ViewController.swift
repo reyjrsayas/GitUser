@@ -7,6 +7,27 @@
 //
 
 import UIKit
+import Alamofire
+
+class NetworkManager {
+    static let shared = NetworkManager()
+    let reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.apple.com")
+    func startNetworkReachabilityObserver() {
+        reachabilityManager?.startListening(onUpdatePerforming: { status in
+
+            switch status {
+                            case .notReachable:
+                                print("The network is not reachable")
+                            case .unknown :
+                                print("It is unknown whether the network is reachable")
+                            case .reachable(.ethernetOrWiFi):
+                                print("The network is reachable over the WiFi connection")
+                            case .reachable(.cellular):
+                                print("The network is reachable over the cellular connection")
+                      }
+        })
+    }
+}
 
 class ViewController: UITableViewController {
     
@@ -18,9 +39,12 @@ class ViewController: UITableViewController {
     var minPageSize:Int = 100;
     
     private var isLoading: Bool = false;
+    let debouncer = Debouncer(timeInterval: 0.3)
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+//        NetworkStatus.sharedInstace.startNetworkReachabilityObserver()
         
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -34,13 +58,22 @@ class ViewController: UITableViewController {
             loadMoreUser()
         } else {
             currentIdx = users!.count + randomPageSize()
-            self.tableView.reloadData()
+            self.reloadTableViews()
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        users = CoreDataService.sharedInstance.getAllUsers();
-        self.tableView.reloadData()
+        debouncer.handler = {
+            // Send the debounced network request here
+            self.users = CoreDataService.sharedInstance.searchUser(with: self.searchController.searchBar.text!);
+            self.reloadTableViews()
+        }
+    }
+    
+    fileprivate func reloadTableViews() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     fileprivate func randomPageSize() -> Int{
@@ -61,13 +94,26 @@ class ViewController: UITableViewController {
                     // Do somethere here when data is finished saving
                     self.users = CoreDataService.sharedInstance.getAllUsers();
                     self.currentIdx = self.users!.count + self.randomPageSize()
-                    self.tableView.reloadData()
+                    self.reloadTableViews()
                     self.isLoading = false;
                 }
             case .failure(let error):
                 print(error.localizedDescription);
+                DispatchQueue.main.async {
+                    self.showAlert(message: error.localizedDescription, title: "Error")
+                }
             }
         }
+    }
+    
+    func showAlert(message: String, title: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Retry", style: .default, handler: { (action) in
+            self.loadMoreUser(idx: self.currentIdx)
+        }))
+        
+        self.navigationController?.present(alert, animated: true, completion: nil)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -77,11 +123,14 @@ class ViewController: UITableViewController {
         let details = UserDetailViewController(nibName: "UserDetailViewController", bundle: nil)
         let user = users![indexPath.row];
         details.user = user
+        details.doneHandler = {
+            self.debouncer.renewInterval()
+        }
         navigationController?.pushViewController(details, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return users!.count + 1
+        return searchController.searchBar.text!.isEmpty ?  users!.count + 1 : users!.count
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -91,7 +140,7 @@ class ViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if users!.count > indexPath.row {
             let user = users![indexPath.row];
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? UserTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "UserTableViewCell") as? UserTableViewCell
             cell?.setupUser(user, (indexPath.row % 4) == 3)
             return cell!
         } else {
@@ -113,13 +162,38 @@ class ViewController: UITableViewController {
 }
 
 extension ViewController: UISearchResultsUpdating {
+    
   func updateSearchResults(for searchController: UISearchController) {
 //    let searchBar = searchController.searchBar
-    
-    self.users = CoreDataService.sharedInstance.searchUser(with: searchController.searchBar.text!);
-    self.tableView.reloadData()
-    
+    debouncer.renewInterval()
   }
+}
+
+class Debouncer {
+    init(timeInterval: TimeInterval) {
+        self.timeInterval = timeInterval
+    }
+
+    typealias Handler = () -> Void
+    var handler: Handler?
+
+    private let timeInterval: TimeInterval
+
+    private var timer: Timer?
+    func renewInterval() {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false, block: { [weak self] timer in
+            self?.handleTimer(timer)
+        })
+    }
+
+    private func handleTimer(_ timer: Timer) {
+        guard timer.isValid else {
+            return
+        }
+        handler?()
+    }
+
 }
 
 
