@@ -33,7 +33,7 @@ class ViewController: UITableViewController {
     
     let searchController = UISearchController(searchResultsController: nil)
     
-    var users: [User]?
+    var cells: [DynamicTVCRow]? = []
     
     var currentIdx:Int = 0;
     var minPageSize:Int = 100;
@@ -44,7 +44,7 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        NetworkStatus.sharedInstace.startNetworkReachabilityObserver()
+        self.registetCellNibs()
         
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -52,20 +52,19 @@ class ViewController: UITableViewController {
         navigationItem.searchController = searchController
         definesPresentationContext = true
         
-        users = CoreDataService.sharedInstance.getAllUsers();
-        
-        if users?.count == 0 {
-            loadMoreUser()
-        } else {
-            currentIdx = users!.count + randomPageSize()
-            self.reloadTableViews()
-        }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
         debouncer.handler = {
             // Send the debounced network request here
-            self.users = CoreDataService.sharedInstance.searchUser(with: self.searchController.searchBar.text!);
+            self.buildTableCell(users: CoreDataService.sharedInstance.searchUser(with: self.searchController.searchBar.text!)!)
+            self.reloadTableViews()
+        }
+        
+        self.buildTableCell(users: CoreDataService.sharedInstance.getAllUsers())
+        
+        if cells?.count == 0 {
+            loadMoreUser()
+        } else {
+            self.isLoading = true;
+            currentIdx = cells!.count + randomPageSize()
             self.reloadTableViews()
         }
     }
@@ -73,6 +72,7 @@ class ViewController: UITableViewController {
     fileprivate func reloadTableViews() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
+            self.isLoading = false
         }
     }
     
@@ -92,8 +92,8 @@ class ViewController: UITableViewController {
                     
                 }) {
                     // Do somethere here when data is finished saving
-                    self.users = CoreDataService.sharedInstance.getAllUsers();
-                    self.currentIdx = self.users!.count + self.randomPageSize()
+                    self.buildTableCell(users: CoreDataService.sharedInstance.getAllUsers()!)
+                    self.currentIdx = self.cells!.count + self.randomPageSize()
                     self.reloadTableViews()
                     self.isLoading = false;
                 }
@@ -109,6 +109,8 @@ class ViewController: UITableViewController {
     func showAlert(message: String, title: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
+//        alert.addAction(UIAlertAction(title: "Try again later", style: .default, handler: nil))
+        
         alert.addAction(UIAlertAction(title: "Retry", style: .default, handler: { (action) in
             self.loadMoreUser(idx: self.currentIdx)
         }))
@@ -116,21 +118,24 @@ class ViewController: UITableViewController {
         self.navigationController?.present(alert, animated: true, completion: nil)
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("you tapped me")
-        
-        
+    fileprivate func showUserDetails(user:User) {
         let details = UserDetailViewController(nibName: "UserDetailViewController", bundle: nil)
-        let user = users![indexPath.row];
         details.user = user
-        details.doneHandler = {
-            self.debouncer.renewInterval()
+        details.doneHandler = { isDone in
+            if isDone {
+                self.debouncer.renewInterval()
+            }
         }
         navigationController?.pushViewController(details, animated: true)
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = cells![indexPath.row]
+        cell.selectRow()
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchController.searchBar.text!.isEmpty ?  users!.count + 1 : users!.count
+        return searchController.searchBar.text!.isEmpty ?  cells!.count + 1 : cells!.count
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -138,11 +143,9 @@ class ViewController: UITableViewController {
     }
        
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if users!.count > indexPath.row {
-            let user = users![indexPath.row];
-            let cell = tableView.dequeueReusableCell(withIdentifier: "UserTableViewCell") as? UserTableViewCell
-            cell?.setupUser(user, (indexPath.row % 4) == 3)
-            return cell!
+        if cells!.count > indexPath.row {
+            let cell = cells![indexPath.row].getCellFor(tableView, indexPath: indexPath);
+            return cell
         } else {
             let loadingCell = LoadingTableViewCell.instanceFromNib()
             return loadingCell
@@ -155,6 +158,7 @@ class ViewController: UITableViewController {
 
         if offsetY > contentHeight - scrollView.frame.size.height {
             if !self.isLoading {
+                if !searchController.searchBar.text!.isEmpty { return }
                 self.loadMoreUser(idx: currentIdx)
             }
         }
@@ -164,7 +168,7 @@ class ViewController: UITableViewController {
 extension ViewController: UISearchResultsUpdating {
     
   func updateSearchResults(for searchController: UISearchController) {
-//    let searchBar = searchController.searchBar
+    if searchController.searchBar.text!.isEmpty { return }
     debouncer.renewInterval()
   }
 }
@@ -194,6 +198,66 @@ class Debouncer {
         handler?()
     }
 
+}
+
+extension ViewController {
+    fileprivate func registetCellNibs() {
+        self.tableView.register(UINib(nibName: "UserNormalCell", bundle: nil), forCellReuseIdentifier: String(describing: UserNormalCell.self))
+        self.tableView.register(UINib(nibName: "UserNoteCell", bundle: nil), forCellReuseIdentifier: String(describing: UserNoteCell.self))
+        self.tableView.register(UINib(nibName: "UserInvertAvatarCell", bundle: nil), forCellReuseIdentifier: String(describing: UserInvertAvatarCell.self))
+        self.tableView.register(UINib(nibName: "UserInvertAvatarAndNoteCell", bundle: nil), forCellReuseIdentifier: String(describing: UserInvertAvatarAndNoteCell.self))
+    }
+    
+    fileprivate func buildTableCell(users: [User]?) {
+//        var cells = [DynamicTVCRow]()
+        self.cells = []
+        for (index, user) in users!.enumerated() {
+            
+            // if user if 4th in the list invert image
+            if (index % 4) == 3 {
+                if user.note != nil {
+                    if user.note!.isEmpty {
+                        let cell = UserInvertAvatarCellWrapper(user: user) { (user) in
+                            self.showUserDetails(user: user)
+                        }
+                        self.cells?.append(cell)
+                    } else {
+                        let cell = UserInverAvatarAndNoteCellWrapper(user: user) { (user) in
+                            self.showUserDetails(user: user)
+                        }
+                        self.cells?.append(cell)
+                    }
+                } else {
+                    let cell = UserInvertAvatarCellWrapper(user: user) { (user) in
+                        self.showUserDetails(user: user)
+                    }
+                    self.cells?.append(cell)
+                }
+                
+            } else {
+                if user.note != nil {
+                    if user.note!.isEmpty {
+                        let cell = UserNormalCellWrapper(user: user) { (user) in
+                            self.showUserDetails(user: user)
+                        }
+                        self.cells?.append(cell)
+                    } else {
+                        let cell = UserNoteCellWrapper(user: user) { (user) in
+                            self.showUserDetails(user: user)
+                        }
+                        self.cells?.append(cell)
+                    }
+                } else {
+                    let cell = UserNormalCellWrapper(user: user) { (user) in
+                        self.showUserDetails(user: user)
+                    }
+                    self.cells?.append(cell)
+                }
+            }
+        }
+        
+//        return cells
+    }
 }
 
 

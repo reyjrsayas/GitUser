@@ -14,7 +14,7 @@ class UserDetailViewController: UIViewController {
     private var imgLoader = ImageLoader()
     @IBOutlet weak var userTableView: UITableView!
     
-    var doneHandler: (()->())?
+    var doneHandler: ((Bool)->())?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,11 +31,14 @@ class UserDetailViewController: UIViewController {
                     case .success(let response):
                         var _updateUser = response.data;
                         _updateUser.avatarImage = user.avatarImage
-                        _ = CoreDataService.sharedInstance.updateUser(user: _updateUser)
-                        self.initData()
+                        CoreDataService.sharedInstance.updateUserDetails(user: _updateUser, complete: {
+                            self.initData()
+                        })
                     case .failure(let error):
                         print(error.localizedDescription);
-                        self.showAlert(message: error.localizedDescription, title: "Error")
+                        DispatchQueue.main.async {
+                            self.showAlert(message: error.localizedDescription, title: "Error")
+                        }
                     }
                 }
             } else {
@@ -52,7 +55,7 @@ class UserDetailViewController: UIViewController {
         
         alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: { (action) in
             self.navigationController?.popViewController(animated: true)
-            self.doneHandler?()
+            self.doneHandler?(title == "Error" ? false : true)
         }))
         
         self.present(alert, animated: true, completion: nil)

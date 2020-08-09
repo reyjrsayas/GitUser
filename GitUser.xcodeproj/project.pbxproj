@@ -43,6 +43,16 @@
 		62F69B1969B548727700FDBA /* Pods_GitUser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1C4FB6F85B740663D67B10 /* Pods_GitUser.framework */; };
 		81A514FD160539C9E38C7174 /* Pods_GitUser_GitUserUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B53D86D8ED639B7FA75DCC4 /* Pods_GitUser_GitUserUITests.framework */; };
 		D84CFBC624DE912600F5A7A5 /* NetworkStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CFBC524DE912600F5A7A5 /* NetworkStatus.swift */; };
+		D8664FBC24DF8EDA004BF72B /* DynamicTVCRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8664FBB24DF8EDA004BF72B /* DynamicTVCRow.swift */; };
+		D8664FC024DF9002004BF72B /* UserNormalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8664FBE24DF9002004BF72B /* UserNormalCell.swift */; };
+		D8664FC124DF9002004BF72B /* UserNormalCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8664FBF24DF9002004BF72B /* UserNormalCell.xib */; };
+		D8664FC424DF9417004BF72B /* UserNoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8664FC224DF9417004BF72B /* UserNoteCell.swift */; };
+		D8664FC524DF9417004BF72B /* UserNoteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8664FC324DF9417004BF72B /* UserNoteCell.xib */; };
+		D8664FC824DFA185004BF72B /* UserInvertAvatarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8664FC624DFA185004BF72B /* UserInvertAvatarCell.swift */; };
+		D8664FC924DFA185004BF72B /* UserInvertAvatarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8664FC724DFA185004BF72B /* UserInvertAvatarCell.xib */; };
+		D8664FCC24DFA326004BF72B /* UserInvertAvatarAndNoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8664FCA24DFA326004BF72B /* UserInvertAvatarAndNoteCell.swift */; };
+		D8664FCD24DFA326004BF72B /* UserInvertAvatarAndNoteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8664FCB24DFA326004BF72B /* UserInvertAvatarAndNoteCell.xib */; };
+		D8664FCF24DFA5A6004BF72B /* TableViewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8664FCE24DFA5A6004BF72B /* TableViewService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,6 +121,16 @@
 		87F93D4B1F7C75805FCD0CEA /* Pods-GitUser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitUser.release.xcconfig"; path = "Target Support Files/Pods-GitUser/Pods-GitUser.release.xcconfig"; sourceTree = "<group>"; };
 		BBF1A640EF368542BE8992CC /* Pods-GitUser-GitUserUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitUser-GitUserUITests.release.xcconfig"; path = "Target Support Files/Pods-GitUser-GitUserUITests/Pods-GitUser-GitUserUITests.release.xcconfig"; sourceTree = "<group>"; };
 		D84CFBC524DE912600F5A7A5 /* NetworkStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStatus.swift; sourceTree = "<group>"; };
+		D8664FBB24DF8EDA004BF72B /* DynamicTVCRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTVCRow.swift; sourceTree = "<group>"; };
+		D8664FBE24DF9002004BF72B /* UserNormalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNormalCell.swift; sourceTree = "<group>"; };
+		D8664FBF24DF9002004BF72B /* UserNormalCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserNormalCell.xib; sourceTree = "<group>"; };
+		D8664FC224DF9417004BF72B /* UserNoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNoteCell.swift; sourceTree = "<group>"; };
+		D8664FC324DF9417004BF72B /* UserNoteCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserNoteCell.xib; sourceTree = "<group>"; };
+		D8664FC624DFA185004BF72B /* UserInvertAvatarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInvertAvatarCell.swift; sourceTree = "<group>"; };
+		D8664FC724DFA185004BF72B /* UserInvertAvatarCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserInvertAvatarCell.xib; sourceTree = "<group>"; };
+		D8664FCA24DFA326004BF72B /* UserInvertAvatarAndNoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInvertAvatarAndNoteCell.swift; sourceTree = "<group>"; };
+		D8664FCB24DFA326004BF72B /* UserInvertAvatarAndNoteCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserInvertAvatarAndNoteCell.xib; sourceTree = "<group>"; };
+		D8664FCE24DFA5A6004BF72B /* TableViewService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewService.swift; sourceTree = "<group>"; };
 		E7331A824E03BD272B89CB53 /* Pods-GitUserTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitUserTests.release.xcconfig"; path = "Target Support Files/Pods-GitUserTests/Pods-GitUserTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -167,6 +187,7 @@
 		5802F50024CF133300396FF0 /* GitUser */ = {
 			isa = PBXGroup;
 			children = (
+				D8664FBA24DF8D33004BF72B /* Protocols */,
 				D84CFBC024DE83D100F5A7A5 /* Delegates */,
 				58532DC124DA3CA2000D199C /* TableCell */,
 				58532DC024DA3BCD000D199C /* Coordinator */,
@@ -226,6 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				5802F53B24CF184A00396FF0 /* ApiService.swift */,
+				D8664FCE24DFA5A6004BF72B /* TableViewService.swift */,
 				58C164CD24D0484500E04C9A /* CoreDataService.swift */,
 				D84CFBC524DE912600F5A7A5 /* NetworkStatus.swift */,
 			);
@@ -249,6 +271,7 @@
 		58532DC124DA3CA2000D199C /* TableCell */ = {
 			isa = PBXGroup;
 			children = (
+				D8664FBD24DF8F86004BF72B /* UserListCell */,
 				58DA568E24DAB12F00DBC968 /* LoadingCell */,
 				58532DC424DA6FB2000D199C /* UserDetails */,
 				58532DC224DA3CBE000D199C /* UserTableViewCell.swift */,
@@ -323,6 +346,29 @@
 			children = (
 			);
 			path = Delegates;
+			sourceTree = "<group>";
+		};
+		D8664FBA24DF8D33004BF72B /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				D8664FBB24DF8EDA004BF72B /* DynamicTVCRow.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		D8664FBD24DF8F86004BF72B /* UserListCell */ = {
+			isa = PBXGroup;
+			children = (
+				D8664FBE24DF9002004BF72B /* UserNormalCell.swift */,
+				D8664FBF24DF9002004BF72B /* UserNormalCell.xib */,
+				D8664FC224DF9417004BF72B /* UserNoteCell.swift */,
+				D8664FC324DF9417004BF72B /* UserNoteCell.xib */,
+				D8664FC624DFA185004BF72B /* UserInvertAvatarCell.swift */,
+				D8664FC724DFA185004BF72B /* UserInvertAvatarCell.xib */,
+				D8664FCA24DFA326004BF72B /* UserInvertAvatarAndNoteCell.swift */,
+				D8664FCB24DFA326004BF72B /* UserInvertAvatarAndNoteCell.xib */,
+			);
+			path = UserListCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -435,10 +481,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				58AE816324DA854C00B1907D /* SaveTableViewCell.xib in Resources */,
+				D8664FCD24DFA326004BF72B /* UserInvertAvatarAndNoteCell.xib in Resources */,
+				D8664FC124DF9002004BF72B /* UserNormalCell.xib in Resources */,
 				58AE815B24DA76A500B1907D /* UserProfileTableViewCell.xib in Resources */,
+				D8664FC524DF9417004BF72B /* UserNoteCell.xib in Resources */,
 				5802F51124CF133300396FF0 /* LaunchScreen.storyboard in Resources */,
 				58DA569224DAB14600DBC968 /* LoadingTableViewCell.xib in Resources */,
 				58AE815F24DA7EBB00B1907D /* UserNoteTableViewCell.xib in Resources */,
+				D8664FC924DFA185004BF72B /* UserInvertAvatarCell.xib in Resources */,
 				58532DC824DA6FCA000D199C /* UserAvatarTableViewCell.xib in Resources */,
 				5802F50E24CF133300396FF0 /* Assets.xcassets in Resources */,
 				5802F53824CF173100396FF0 /* UserDetailViewController.xib in Resources */,
@@ -571,17 +621,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				58AE816224DA854C00B1907D /* SaveTableViewCell.swift in Sources */,
+				D8664FBC24DF8EDA004BF72B /* DynamicTVCRow.swift in Sources */,
 				58C164CA24D047E600E04C9A /* FollowersEntity+CoreDataProperties.swift in Sources */,
 				58C164C524D047E600E04C9A /* UserEntity+CoreDataClass.swift in Sources */,
 				58C164CC24D047E600E04C9A /* FollowingEntity+CoreDataProperties.swift in Sources */,
 				D84CFBC624DE912600F5A7A5 /* NetworkStatus.swift in Sources */,
 				5802F50624CF133300396FF0 /* ViewController.swift in Sources */,
+				D8664FC024DF9002004BF72B /* UserNormalCell.swift in Sources */,
 				58532DC324DA3CBE000D199C /* UserTableViewCell.swift in Sources */,
+				D8664FCF24DFA5A6004BF72B /* TableViewService.swift in Sources */,
+				D8664FC424DF9417004BF72B /* UserNoteCell.swift in Sources */,
 				58AE815E24DA7EBB00B1907D /* UserNoteTableViewCell.swift in Sources */,
 				5802F53724CF173100396FF0 /* UserDetailViewController.swift in Sources */,
 				58C164C824D047E600E04C9A /* AvatarImageEntity+CoreDataProperties.swift in Sources */,
 				5802F53C24CF184A00396FF0 /* ApiService.swift in Sources */,
 				58C164CE24D0484500E04C9A /* CoreDataService.swift in Sources */,
+				D8664FC824DFA185004BF72B /* UserInvertAvatarCell.swift in Sources */,
 				58C164CB24D047E600E04C9A /* FollowingEntity+CoreDataClass.swift in Sources */,
 				58AE815A24DA76A500B1907D /* UserProfileTableViewCell.swift in Sources */,
 				5802F50224CF133300396FF0 /* AppDelegate.swift in Sources */,
@@ -592,6 +647,7 @@
 				58C164C624D047E600E04C9A /* UserEntity+CoreDataProperties.swift in Sources */,
 				5802F50424CF133300396FF0 /* SceneDelegate.swift in Sources */,
 				5802F50C24CF133300396FF0 /* GitUser.xcdatamodeld in Sources */,
+				D8664FCC24DFA326004BF72B /* UserInvertAvatarAndNoteCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

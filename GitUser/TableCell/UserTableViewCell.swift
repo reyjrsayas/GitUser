@@ -8,6 +8,14 @@
 
 import UIKit
 
+protocol  UserElementModel: class {
+    
+}
+
+protocol UserElementCell: class {
+    func configure(withUser user:User)
+}
+
 class UserTableViewCell: UITableViewCell {
 
     @IBOutlet weak var noteImg: UIImageView!
@@ -27,7 +35,7 @@ class UserTableViewCell: UITableViewCell {
         self.user = user;
         lblUsername.text = self.user?.login
         if self.user?.note != nil {
-            if !(self.user?.note!.isEmpty)! {
+            if !(self.user?.note?.isEmpty)! {
                 noteImg.isHidden = false
             } else {
                 noteImg.isHidden = true
@@ -62,6 +70,7 @@ class ImageLoader {
         session = URLSession.shared
 //        task = NSURLSession()
         self.cache = NSCache()
+        self.cache.evictsObjectsWithDiscardedContent = false
     }
     
     func obtainImageWithPath(imagePath: String, completionHandler: @escaping (UIImage) -> ()) {

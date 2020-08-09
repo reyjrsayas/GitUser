@@ -269,6 +269,7 @@ class ApiService {
                             semaphore.signal()
                            return
                        }
+                       
                        do {
                         let values = try JSONDecoder().decode(UserListResponse.self, from: data)
                         completion(.success(values as! T))

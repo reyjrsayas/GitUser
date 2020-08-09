@@ -60,7 +60,38 @@ class CoreDataService {
         }
     }
     
-    func updateUserDetails(user:User) -> Bool {
+    func deleteAllUsers(_ complete: @escaping(() -> ())) {
+        let privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        privateContext.persistentStoreCoordinator = manageContext?.persistentStoreCoordinator
+        
+        privateContext.perform {
+            let contex = self.getManageContext()
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
+            let entity = NSEntityDescription.entity(forEntityName: "UserEntity", in: contex)
+            fetchRequest.entity = entity
+            
+            do {
+                let result = try contex.fetch(fetchRequest) as! [UserEntity]
+                
+                for user in result {
+                    contex.delete(user)
+                }
+                
+                do {
+                    try contex.save()
+                    DispatchQueue.main.asyncAfter(deadline: .now()) {
+                        complete()
+                    }
+                } catch {
+                    fatalError("Failure to save child context: \(error)")
+                }
+            } catch {
+                fatalError("Failure to fetch the user")
+            }
+        }
+    }
+    
+    public func updateUserDetails(user:User, complete: @escaping(() -> ())) {
         let privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         privateContext.persistentStoreCoordinator = manageContext?.persistentStoreCoordinator
         privateContext.perform {
@@ -94,7 +125,9 @@ class CoreDataService {
                 
                 do {
                     try contex.save()
-//                    return true
+                    DispatchQueue.main.asyncAfter(deadline: .now()) {
+                        complete()
+                    }
                 } catch {
                     fatalError("Failure to save child context: \(error)")
                 }
@@ -102,10 +135,7 @@ class CoreDataService {
             } catch {
                 fatalError("Failure to fetch the user")
             }
-            
-//            return false
         }
-        return false
     }
     
     func updateUser(user:User) -> Bool{
@@ -261,7 +291,7 @@ class CoreDataService {
         let manageContext = getManageContext()
         
         let userFetch = getUserFetchRequest()
-        
+//        
         var users = [User]()
         
         // sort the result by id
@@ -303,6 +333,8 @@ class CoreDataService {
         } catch {
             fatalError("Failed to fetch git users: \(error)")
         }
+        
+        return []
     }
     
     func entityIsExisting(id:Int) -> Bool {
