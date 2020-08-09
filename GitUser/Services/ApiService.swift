@@ -14,15 +14,21 @@ public enum ApiType:Int {
 }
 
 public enum APIServiceError: Error {
-    case apiError
+    case apiError(message: String)
     case invalidEndpoint
     case invalidResponse(message:String)
     case noData
-    case decodeError
+    case decodeError(message:String)
     
     var errorDescription:String? {
         switch self {
         case let .invalidResponse(message: message):
+            return message
+            
+        case let .apiError(message: message):
+            return message
+            
+        case let .decodeError(message: message):
             return message
         default:
             break
@@ -163,7 +169,7 @@ class ApiService {
                        // Finished
                        semaphore.signal()
                case .failure( _):
-                       completion(.failure(.apiError))
+                       completion(.failure(.apiError(message: "No Internet Connection")))
                        semaphore.signal()
                    }
             }.resume()
@@ -224,11 +230,11 @@ class ApiService {
                         // Finished
                         semaphore.signal()
                        } catch {
-                           completion(.failure(.decodeError))
+                           completion(.failure(.decodeError(message: "JSON decoding error")))
                             semaphore.signal()
                        }
                case .failure( _):
-                       completion(.failure(.apiError))
+                       completion(.failure(.apiError(message: "No Internet Connection")))
                        semaphore.signal()
                    }
             }.resume()
@@ -258,7 +264,11 @@ class ApiService {
                 return
             }
             
-            URLSession.shared.dataTask(with: url) { (result) in
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = 10
+            
+            let urlSession = URLSession(configuration: config)
+            urlSession.dataTask(with: url) { (result) in
                switch result {
                    case .success(let (response, data)):
                     
@@ -276,11 +286,11 @@ class ApiService {
                         // Finished
                         semaphore.signal()
                        } catch {
-                           completion(.failure(.decodeError))
+                           completion(.failure(.decodeError(message: "JSON decoding error")))
                             semaphore.signal()
                        }
                case .failure( _):
-                       completion(.failure(.apiError))
+                       completion(.failure(.apiError(message: "No Internet Connection")))
                        semaphore.signal()
                    }
             }.resume()

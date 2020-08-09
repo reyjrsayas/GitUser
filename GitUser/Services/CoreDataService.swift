@@ -332,9 +332,8 @@ class CoreDataService {
             return users
         } catch {
             fatalError("Failed to fetch git users: \(error)")
+            return []
         }
-        
-        return []
     }
     
     func entityIsExisting(id:Int) -> Bool {

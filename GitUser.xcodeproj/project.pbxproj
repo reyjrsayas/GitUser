@@ -53,6 +53,7 @@
 		D8664FCC24DFA326004BF72B /* UserInvertAvatarAndNoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8664FCA24DFA326004BF72B /* UserInvertAvatarAndNoteCell.swift */; };
 		D8664FCD24DFA326004BF72B /* UserInvertAvatarAndNoteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8664FCB24DFA326004BF72B /* UserInvertAvatarAndNoteCell.xib */; };
 		D8664FCF24DFA5A6004BF72B /* TableViewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8664FCE24DFA5A6004BF72B /* TableViewService.swift */; };
+		D8664FD224DFD619004BF72B /* Debouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8664FD124DFD619004BF72B /* Debouncer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -131,6 +132,7 @@
 		D8664FCA24DFA326004BF72B /* UserInvertAvatarAndNoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInvertAvatarAndNoteCell.swift; sourceTree = "<group>"; };
 		D8664FCB24DFA326004BF72B /* UserInvertAvatarAndNoteCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserInvertAvatarAndNoteCell.xib; sourceTree = "<group>"; };
 		D8664FCE24DFA5A6004BF72B /* TableViewService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewService.swift; sourceTree = "<group>"; };
+		D8664FD124DFD619004BF72B /* Debouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debouncer.swift; sourceTree = "<group>"; };
 		E7331A824E03BD272B89CB53 /* Pods-GitUserTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitUserTests.release.xcconfig"; path = "Target Support Files/Pods-GitUserTests/Pods-GitUserTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -187,6 +189,7 @@
 		5802F50024CF133300396FF0 /* GitUser */ = {
 			isa = PBXGroup;
 			children = (
+				D8664FD024DFD60C004BF72B /* Helper */,
 				D8664FBA24DF8D33004BF72B /* Protocols */,
 				D84CFBC024DE83D100F5A7A5 /* Delegates */,
 				58532DC124DA3CA2000D199C /* TableCell */,
@@ -194,7 +197,6 @@
 				58C164AC24D0444D00E04C9A /* CoreData */,
 				5802F53D24CF20F900396FF0 /* Models */,
 				5802F53A24CF183700396FF0 /* Services */,
-				5802F53924CF180D00396FF0 /* Helpers */,
 				5802F53424CF171F00396FF0 /* ViewControllers */,
 				5802F50124CF133300396FF0 /* AppDelegate.swift */,
 				5802F50324CF133300396FF0 /* SceneDelegate.swift */,
@@ -234,13 +236,6 @@
 				5802F53624CF173100396FF0 /* UserDetailViewController.xib */,
 			);
 			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		5802F53924CF180D00396FF0 /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Helpers;
 			sourceTree = "<group>";
 		};
 		5802F53A24CF183700396FF0 /* Services */ = {
@@ -369,6 +364,14 @@
 				D8664FCB24DFA326004BF72B /* UserInvertAvatarAndNoteCell.xib */,
 			);
 			path = UserListCell;
+			sourceTree = "<group>";
+		};
+		D8664FD024DFD60C004BF72B /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				D8664FD124DFD619004BF72B /* Debouncer.swift */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -647,6 +650,7 @@
 				58C164C624D047E600E04C9A /* UserEntity+CoreDataProperties.swift in Sources */,
 				5802F50424CF133300396FF0 /* SceneDelegate.swift in Sources */,
 				5802F50C24CF133300396FF0 /* GitUser.xcdatamodeld in Sources */,
+				D8664FD224DFD619004BF72B /* Debouncer.swift in Sources */,
 				D8664FCC24DFA326004BF72B /* UserInvertAvatarAndNoteCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

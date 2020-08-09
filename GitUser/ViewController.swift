@@ -45,19 +45,12 @@ class ViewController: UITableViewController {
         super.viewDidLoad()
         
         self.registetCellNibs()
-        
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search Candies"
-        navigationItem.searchController = searchController
-        definesPresentationContext = true
-        
-        debouncer.handler = {
-            // Send the debounced network request here
-            self.buildTableCell(users: CoreDataService.sharedInstance.searchUser(with: self.searchController.searchBar.text!)!)
-            self.reloadTableViews()
-        }
-        
+        self.initSearchController()
+        self.initDebouncerHandler()
+        self.initDataDisplay()
+    }
+    
+    fileprivate func initDataDisplay() {
         self.buildTableCell(users: CoreDataService.sharedInstance.getAllUsers())
         
         if cells?.count == 0 {
@@ -67,17 +60,6 @@ class ViewController: UITableViewController {
             currentIdx = cells!.count + randomPageSize()
             self.reloadTableViews()
         }
-    }
-    
-    fileprivate func reloadTableViews() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            self.isLoading = false
-        }
-    }
-    
-    fileprivate func randomPageSize() -> Int{
-        return Int.random(in: 0 ... minPageSize)
     }
 
     func loadMoreUser(idx: Int = 0) {
@@ -98,9 +80,9 @@ class ViewController: UITableViewController {
                     self.isLoading = false;
                 }
             case .failure(let error):
-                print(error.localizedDescription);
+//                print(error.errorDescription);
                 DispatchQueue.main.async {
-                    self.showAlert(message: error.localizedDescription, title: "Error")
+                    self.showAlert(message: error.errorDescription!, title: "Error")
                 }
             }
         }
@@ -129,6 +111,36 @@ class ViewController: UITableViewController {
         navigationController?.pushViewController(details, animated: true)
     }
     
+    fileprivate func initDebouncerHandler() {
+        debouncer.handler = {
+            // Send the debounced network request here
+            self.buildTableCell(users: CoreDataService.sharedInstance.searchUser(with: self.searchController.searchBar.text!)!)
+            self.reloadTableViews()
+        }
+    }
+    
+    fileprivate func initSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Candies"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+    }
+    
+    fileprivate func reloadTableViews() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            self.isLoading = false
+        }
+    }
+    
+    fileprivate func randomPageSize() -> Int{
+        return Int.random(in: 0 ... minPageSize)
+    }
+}
+
+// TableView Datasource & Delegate
+extension ViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = cells![indexPath.row]
         cell.selectRow()
@@ -165,39 +177,12 @@ class ViewController: UITableViewController {
     }
 }
 
+// UISeachController delegate
 extension ViewController: UISearchResultsUpdating {
-    
   func updateSearchResults(for searchController: UISearchController) {
     if searchController.searchBar.text!.isEmpty { return }
     debouncer.renewInterval()
   }
-}
-
-class Debouncer {
-    init(timeInterval: TimeInterval) {
-        self.timeInterval = timeInterval
-    }
-
-    typealias Handler = () -> Void
-    var handler: Handler?
-
-    private let timeInterval: TimeInterval
-
-    private var timer: Timer?
-    func renewInterval() {
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false, block: { [weak self] timer in
-            self?.handleTimer(timer)
-        })
-    }
-
-    private func handleTimer(_ timer: Timer) {
-        guard timer.isValid else {
-            return
-        }
-        handler?()
-    }
-
 }
 
 extension ViewController {
@@ -209,7 +194,6 @@ extension ViewController {
     }
     
     fileprivate func buildTableCell(users: [User]?) {
-//        var cells = [DynamicTVCRow]()
         self.cells = []
         for (index, user) in users!.enumerated() {
             
@@ -255,8 +239,6 @@ extension ViewController {
                 }
             }
         }
-        
-//        return cells
     }
 }
 
